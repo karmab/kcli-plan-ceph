@@ -3,7 +3,7 @@ dnf -y install --assumeyes cephadm
 
 mkdir -p /etc/ceph
 mon_ip=$(hostname -I)
-cephadm bootstrap --mon-ip $mon_ip --allow-fqdn-hostname --initial-dashboard-password {{ admin_password }}
+cephadm bootstrap --mon-ip $mon_ip --allow-fqdn-hostname --initial-dashboard-password {{ admin_password }} --dashboard-password-noupdate
 fsid=$(cat /etc/ceph/ceph.conf | grep fsid | awk '{ print $3}')
 {% for number in range(1, nodes) %}
   {% set ip = '{0}-node-0{1}'.format(plan, number)|kcli_info('ip', wait=True) %}
