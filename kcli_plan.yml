@@ -1,0 +1,35 @@
+parameters:
+ nodes: 3
+ pool: default
+ network: default
+ domain: cephlab.local
+ prefix: ceph
+ numcpus: 2
+ memory: 4096
+ image: centos9stream
+ admin_password: password
+ disks:
+ - 100
+ - 100
+
+{% for number in range(0, nodes) %}
+{{ prefix }}-node-0{{ number }}:
+ image: {{ image }}
+ numcpus: {{ numcpus }}
+ memory: {{ memory }}
+ reservedns: true
+ sharedkey: true
+ domain: {{ domain }}
+ nets:
+ - {{ network }}
+ disks: {{ disks }}
+ pool: {{ pool }}
+ cmds:
+ - dnf -y install python3 chrony lvm2 podman
+ - sed -i "s/SELINUX=enforcing/SELINUX=permissive/" /etc/selinux/config
+ - setenforce 0
+{% if number == 0 %}
+ scripts:
+  - bootstrap.sh
+{% endif %}
+{% endfor %}
