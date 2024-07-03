@@ -1,6 +1,7 @@
 parameters:
  nodes: 3
  version: reef
+ sslip: true
  pool: default
  network: default
  domain: cephlab.local
@@ -28,8 +29,11 @@ parameters:
  - sed -i "s/SELINUX=enforcing/SELINUX=permissive/" /etc/selinux/config
  - setenforce 0
 {% if number == 0 %}
- scripts:
-  - bootstrap.sh
  wait: true
+ scripts:
+{% if sslip %}
+ - sslip.sh
+{% endif %}
+ - bootstrap.sh
 {% endif %}
 {% endfor %}
