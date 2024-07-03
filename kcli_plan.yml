@@ -2,7 +2,7 @@ parameters:
  nodes: 3
  version: reef
  sslip: true
- pool: default
+ pool:
  network: default
  domain: cephlab.local
  numcpus: 2
@@ -23,7 +23,7 @@ parameters:
  nets:
  - {{ network }}
  disks: {{ disks }}
- pool: {{ pool }}
+ pool: {{ pool or config_pool }}
  cmds:
  - dnf -y install python3 chrony lvm2 podman
  - sed -i "s/SELINUX=enforcing/SELINUX=permissive/" /etc/selinux/config
