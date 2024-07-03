@@ -1,9 +1,9 @@
 parameters:
  nodes: 3
+ version: reef
  pool: default
  network: default
  domain: cephlab.local
- prefix: ceph
  numcpus: 2
  memory: 4096
  image: centos9stream
@@ -12,12 +12,11 @@ parameters:
  - 100
  - 100
 
-{% for number in range(0, nodes) %}
-{{ prefix }}-node-0{{ number }}:
+{% for number in range(0, nodes)|reverse %}
+{{ plan }}-node-0{{ number }}:
  image: {{ image }}
  numcpus: {{ numcpus }}
  memory: {{ memory }}
- reservedns: true
  sharedkey: true
  domain: {{ domain }}
  nets:
@@ -31,5 +30,6 @@ parameters:
 {% if number == 0 %}
  scripts:
   - bootstrap.sh
+ wait: true
 {% endif %}
 {% endfor %}
